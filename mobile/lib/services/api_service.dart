@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/estacion.dart';
+import 'auth_service.dart';
+
 class ApiService {
   // 10.0.2.2 es el alias del localhost de la PC para emuladores Android
   final String baseUrl = "http://localhost:8000";
@@ -15,4 +17,18 @@ class ApiService {
       throw Exception('Error al conectar con el servidor SMAT');
     }
   }
-}
+
+  // Ahora esta función está DENTRO de la clase ApiService
+  Future<bool> crearEstacion(String nombre, String ubicacion) async {
+    final token = await AuthService().getToken();
+    final response = await http.post(
+      Uri.parse('$baseUrl/estaciones/'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'nombre': nombre, 'ubicacion': ubicacion}),
+    );
+    return response.statusCode == 200;
+  }
+} // La llave de cierre ahora va aquí al final

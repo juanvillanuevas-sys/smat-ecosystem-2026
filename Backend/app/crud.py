@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-from . import models
+import models, schemas  # ANTES: from . import models, schemas
 
 def crear_estacion(db: Session, id: int, nombre: str, ubicacion: str):
     nueva_estacion = models.EstacionDB(
