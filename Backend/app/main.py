@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from sqlalchemy.orm import Session
-from pydantic import BaseModel
 from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+from . import models, schemas, auth, database
 
 # IMPORTACIONES CORRECTAS (Sin puntos, sin prefijo 'app')
 import models, schemas, crud, auth
