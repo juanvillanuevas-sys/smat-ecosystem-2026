@@ -2,32 +2,34 @@ import 'package:flutter/material.dart';
 import '../services/api_service.dart';
 
 class AddEstacionScreen extends StatefulWidget {
-  const AddEstacionScreen({super.key}); // Soluciona aviso de Key
-
   @override
-  State<AddEstacionScreen> createState() => _AddEstacionScreenState();
+  _AddEstacionScreenState createState() => _AddEstacionScreenState();
 }
 
 class _AddEstacionScreenState extends State<AddEstacionScreen> {
-  final _formKey = GlobalKey<FormState>();
+  // Controladores para capturar el texto de los inputs
   final _nombreController = TextEditingController();
   final _ubicacionController = TextEditingController();
+  final _formKey = GlobalKey<FormState>(); // Para validación de formulario
 
-  void _guardar() async {
+  void _guardarEstacion() async {
     if (_formKey.currentState!.validate()) {
-      bool success = await ApiService().crearEstacion(
+      // Llamamos a la función de escritura que creamos en el ApiService
+      bool exito = await ApiService().crearEstacion(
         _nombreController.text,
-        _ubicacionController.text
+        _ubicacionController.text,
       );
 
-      // SOLUCIÓN AZUL: Verificar si el widget sigue presente tras el await
-      if (!mounted) return;
-
-      if (success) {
-        Navigator.pop(context, true);
-      } else {
+      if (exito) {
+        // Si se guardó correctamente, volvemos a la pantalla anterior
+        Navigator.pop(context, true); 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Error: No autorizado o Servidor caído')),
+          SnackBar(content: Text('Estación registrada con éxito')),
+        );
+      } else {
+        // Si falla (ej. token inválido o error de red)
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al registrar la estación')),
         );
       }
     }
@@ -36,28 +38,29 @@ class _AddEstacionScreenState extends State<AddEstacionScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Nueva Estación')),
-      body: Form(
-        key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(16),
+      appBar: AppBar(title: Text('Nueva Estación SMAT')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: _formKey,
           child: Column(
             children: [
               TextFormField(
                 controller: _nombreController,
-                decoration: const InputDecoration(labelText: 'Nombre'),
-                validator: (v) => v!.isEmpty ? 'Requerido' : null,
+                decoration: InputDecoration(labelText: 'Nombre de la Estación'),
+                validator: (value) => value!.isEmpty ? 'Ingrese un nombre' : null,
               ),
+              SizedBox(height: 20),
               TextFormField(
                 controller: _ubicacionController,
-                decoration: const InputDecoration(labelText: 'Ubicación'),
-                validator: (v) => v!.isEmpty ? 'Requerido' : null,
+                decoration: InputDecoration(labelText: 'Ubicación / Coordenadas'),
+                validator: (value) => value!.isEmpty ? 'Ingrese la ubicación' : null,
               ),
-              const SizedBox(height: 20),
+              SizedBox(height: 30),
               ElevatedButton(
-                onPressed: _guardar, 
-                child: const Text('Guardar Estación')
-              )
+                onPressed: _guardarEstacion,
+                child: Text('Registrar Estación'),
+              ),
             ],
           ),
         ),

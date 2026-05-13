@@ -1,18 +1,17 @@
-# --- GENERAL ---
+#-- GENERAL ---
+.DS_Store
 .vscode/
 .idea/
-.DS_Store
 
-# --- PYTHON / BACKEND ---
-# Agregamos el prefijo 'Backend/' si ese es el nombre de tu carpeta
-Backend/venv/
-Backend/__pycache__/
-Backend/*.pyc
-Backend/*.db
-Backend/.pytest_cache/
-Backend/.env
+#-- BACKEND ---
+backend/venv/
+backend/__pycache__/
+backend/*.py[cod]
+backend/.env
+backend/smat.db
+backend/.pytest_cache/
 
-# --- FLUTTER / MOBILE ---
+#-- MOBILE ---
 mobile/.dart_tool/
 mobile/.flutter-plugins
 mobile/.flutter-plugins-dependencies
